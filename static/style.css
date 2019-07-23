@@ -1,0 +1,12 @@
+html,
+body {
+  font-family: "IBM Plex Mono", monospace;
+}
+
+#header {
+  padding: 1em;
+}
+
+#header h1 {
+  font-size: 6em;
+}
