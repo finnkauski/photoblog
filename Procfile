@@ -1,2 +1,2 @@
 release: ./target/release/diesel migration run
-web: ./target/release/bin
+web: ./target/release/main

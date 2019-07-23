@@ -1,3 +1,4 @@
+# use latest buildpack!
 [package]
 name = "photoblog"
 version = "0.1.0"
