@@ -12,10 +12,21 @@ use rocket::config::{Config, Environment, Value};
 use rocket_contrib::{templates::Template, serve::StaticFiles};
 use std::env::var;
 use std::collections::HashMap;
+use std::net::SocketAddr;
+use std::fs::OpenOptions;
+use std::io::Write;
 use photoblog::{ImageDb, models::{Image, NewImage}};
 
 #[get("/", rank = 2)]
-fn home(conn: ImageDb) -> Template {
+fn home(conn: ImageDb, remote_address: SocketAddr) -> Template {
+    let mut file = OpenOptions::new()
+        .append(true)
+        .create(true)
+        .open("log.txt")
+        .unwrap();
+
+    file.write_all(format!("{}\n", remote_address).as_bytes());
+
     Template::render("index", Image::all(&conn))
 }
 
