@@ -4,7 +4,7 @@ use super::schema::images;
 use diesel::{prelude::*, PgConnection};
 use std::collections::HashMap;
 
-#[derive(Queryable, Serialize)]
+#[derive(Debug, AsChangeset, Queryable, Serialize)]
 pub struct Image {
     pub id: i32,
     pub link: String,
@@ -15,7 +15,7 @@ pub struct Image {
 #[table_name = "images"]
 pub struct NewImage {
     pub link: String,
-    pub description: String
+    pub description: String,
 }
 
 impl NewImage {
@@ -50,6 +50,17 @@ impl Image {
                 .expect("Error! Could not get all entries."),
         );
         results
+    }
+
+    pub fn single(id: i32, conn: &PgConnection) -> Option<Image> {
+        images::table.find(id).first::<Image>(conn).ok()
+    }
+
+    pub fn update(id: i32, image: Image, conn: &PgConnection) -> bool {
+        diesel::update(images::table.find(id))
+            .set(&image)
+            .execute(conn)
+            .is_ok()
     }
     pub fn delete(id: i32, conn: &PgConnection) -> bool {
         diesel::delete(images::table.find(id)).execute(conn).is_ok()
